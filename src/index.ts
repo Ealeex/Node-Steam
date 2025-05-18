@@ -5,4 +5,5 @@ import { Steam } from "./Steam.js";
     const steam = await Steam.initialize();
     let apps = await steam.getInstalledApps();
     console.log(apps.map(app => ({ appid: app.appid, name: app.name })));
+    steam.launchGame(983870)
 })();

@@ -3,6 +3,7 @@ import os from 'os';
 import path from 'path';
 import { promises as fs } from 'fs';
 import { parse } from 'vdf-parser';
+import { exec } from 'child_process';
 
 interface Library {
     path: string;
@@ -90,7 +91,6 @@ export class Steam {
         }
     }
 
-
     async getSteamInstallPath(): Promise<string | null> {
         try {
             switch (this.platform) {
@@ -131,6 +131,22 @@ export class Steam {
                 if (!item) return reject(new Error('InstallPath registry key not found'));
                 resolve(item.value);
             });
+        });
+    }
+
+    launchGame(appid: number) {
+
+        const steamUrl = `steam://run/${appid}`
+        let command = '';
+
+        switch(this.platform) {
+            case 'win32': command = `start "" "${steamUrl}"`; break;
+            case 'darwin': command = `open "${steamUrl}"`; break;
+            default: command = `xdg-open "${steamUrl}"`; break;
+        }
+
+        exec(command, (error, stdout, stderr) => {
+            if (error) { console.error(`Failed to launch app ${appid}:`, error); return; }
         });
     }
 

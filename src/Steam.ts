@@ -76,10 +76,12 @@ export class Steam {
             const libraries = await this.loadLibraryVDF();
             const installedApps: App[] = [];
             for (const library of libraries) {
+                try { await fs.access(library.path); } 
+                catch { continue; }
                 const manifestPaths = await this.fetchAppManifest(library.path);
                 for (const manifestPath of manifestPaths) {
                     const app = await this.loadAppACF(manifestPath);
-                    if(app) installedApps.push(app);
+                    if (app) installedApps.push(app);
                 }
             }
             return installedApps;
@@ -87,6 +89,7 @@ export class Steam {
             throw err;
         }
     }
+
 
     async getSteamInstallPath(): Promise<string | null> {
         try {

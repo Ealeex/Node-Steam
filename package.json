@@ -16,6 +16,7 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "vdf-parser": "^1.2.1",
     "winreg": "^1.2.5"
   }
 }
